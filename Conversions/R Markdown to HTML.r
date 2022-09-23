@@ -1,14 +1,21 @@
+library(stringr)
+library(pgirmess)
+library(data.table)
+
+Rmd.file  <- read.delim("SomeDarnRMarkdownFile.Rmd")
+html.file <- data.table(Rmd.file)
+
 # Patterns for replacements:
-headingsPattern <- "(^[#]+)(.+)"
-hyperlinksPattern <- "\\[(\\w+)\\]\\((.+)\\)"
-boldPattern <- "\\*\\*(.+)\\*\\*"
-italicPattern <- "\\*(.+)\\*"
-inlineCodePattern <- "\\`{1}([^\\`].+)\\`{1}"
-strikethroughPattern <- "\\~{2}(.+)\\~{2}"
-indentedCodePattern <- "(^[\\s]+)([\\w]+.+)"
-orderedListPattern <- "(\\d\\.\\s(.+))"
+headingsPattern          <- "(^[#]+)(.+)"
+hyperlinksPattern        <- "\\[(\\w+)\\]\\((.+)\\)"
+boldPattern              <- "\\*\\*(.+)\\*\\*"
+italicPattern            <- "\\*(.+)\\*"
+inlineCodePattern        <- "\\`{1}([^\\`].+)\\`{1}"
+strikethroughPattern     <- "\\~{2}(.+)\\~{2}"
+indentedCodePattern      <- "(^[\\s]+)([\\w]+.+)"
+orderedListPattern       <- "(\\d\\.\\s(.+))"
 codeBlockStartingPattern <- "\\`{3}\\{r\\s?.+\\}"
-codeBlockEndingPattern <- "\\`{3}"
+codeBlockEndingPattern   <- "\\`{3}"
 
 # Headings:
 matches <- do.call(rbind, str_match_all(html.file$X, headingsPattern))
@@ -108,3 +115,8 @@ for(x in 1:length(matches[,1]))
   replacement <- paste('</code>')
   html.file$Y <- str_replace(html.file$Y, coll(matches[x,1]), replacement)
 }
+
+# Resultant file: (original data preserved in html.file$X)
+html.file$Y
+# For those csv diggers:
+write.csv(html.file, "CompareConversions.csv")
