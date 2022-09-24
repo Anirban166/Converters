@@ -1,5 +1,6 @@
 *.o
-.csv
+*.bin
+*.csv
 *.ppm
 *.pam
 .DS_Store
