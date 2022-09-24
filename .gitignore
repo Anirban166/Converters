@@ -1,0 +1,5 @@
+*.o
+.csv
+*.ppm
+*.pam
+.DS_Store
